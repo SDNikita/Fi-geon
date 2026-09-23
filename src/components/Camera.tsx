@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { createPoseDetector } from '../services/pose/PoseDetector';
 import '../style/Camera.css';
-
+import {BODY_LANDMARKS,BODY_CONNECTIONS,} from '../services/pose/poseSkeleton';
 function Camera() {
     const videoRef = useRef<HTMLVideoElement>(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -89,7 +89,8 @@ function Camera() {
                         const landmarks = result.landmarks[0];
 
                         // Рисуем все 33 точки
-                        for (const landmark of landmarks) {
+                        for (const index of BODY_LANDMARKS) {
+                            const landmark = landmarks[index];
                             const x =landmark.x * canvas.width;
 
                             const y =landmark.y * canvas.height;
@@ -100,6 +101,27 @@ function Camera() {
 
                             ctx.fillStyle = 'red';
                             ctx.fill();
+                        }
+                        // Рисуем линии
+                        for (const connection of BODY_CONNECTIONS) {
+                            const start = landmarks[connection[0]];
+                            const end = landmarks[connection[1]];
+
+                            const startX = start.x * canvas.width;
+                            const startY = start.y * canvas.height;
+
+                            const endX = end.x * canvas.width;
+                            const endY = end.y * canvas.height;
+
+                            ctx.beginPath();
+
+                            ctx.moveTo(startX, startY);
+                            ctx.lineTo(endX, endY);
+
+                            ctx.strokeStyle = 'red';
+                            ctx.lineWidth = 3;
+
+                            ctx.stroke();
                         }
                     }
 
