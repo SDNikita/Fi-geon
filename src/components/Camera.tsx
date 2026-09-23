@@ -14,7 +14,8 @@ function Camera() {
     //хук
     useEffect(() => {
         let cancelled = false;
-
+        
+        //Остановка камеры
         function stopCamera() {
             console.log('Останавливаем камеру');
 
