@@ -1,35 +1,164 @@
 import { useEffect, useRef, useState } from 'react';
+import { createPoseDetector } from '../services/pose/PoseDetector';
+import '../style/Camera.css';
 
 function Camera() {
     const videoRef = useRef<HTMLVideoElement>(null);
+    const canvasRef = useRef<HTMLCanvasElement>(null);
 
     const [error, setError] = useState('');
 
     useEffect(() => {
+        let mediaStream: MediaStream | null = null;
+        let animationId: number;
+        let cancelled = false;
+
         async function startCamera() {
             try {
-                const stream = await navigator.mediaDevices.getUserMedia({
+                // Получаем доступ к камере
+                mediaStream = await navigator.mediaDevices.getUserMedia({
                     video: true,
+                    audio: false,
                 });
 
-                if (videoRef.current) {
-                    videoRef.current.srcObject = stream;
+                if (cancelled) {
+                    mediaStream.getTracks().forEach((track) => {
+                        track.stop();
+                    });
+
+                    return;
                 }
+
+                const video = videoRef.current;
+
+                if (!video) {
+                    return;
+                }
+
+                // Подключаем камеру к video
+                video.srcObject = mediaStream;
+
+                // Запускаем видео
+                video.play().catch((error) => {
+                    if (error.name !== 'AbortError') {
+                        console.error(
+                            'Ошибка запуска видео:',
+                            error
+                        );
+                    }
+                });
+
+                // Создаём MediaPipe
+                const poseLandmarker = await createPoseDetector();
+
+                console.log('MediaPipe готов');
+
+                // Обрабатываем кадры
+                function detectPose() {
+                    if (cancelled || !videoRef.current ||!canvasRef.current) {
+                        return;
+                    }
+
+                    const video = videoRef.current;
+                    const canvas = canvasRef.current;
+
+                    // Ждём, пока видео получит размеры
+                    if (video.videoWidth === 0 ||video.videoHeight === 0) {
+                        animationId = requestAnimationFrame(detectPose);
+                        return;
+                    }
+
+                    // Размер canvas = размер видео
+                    canvas.width = video.videoWidth;
+                    canvas.height = video.videoHeight;
+
+                    const ctx = canvas.getContext('2d');
+
+                    if (!ctx) {
+                        return;
+                    }
+
+                    // Получаем landmarks
+                    const result = poseLandmarker.detectForVideo(video,performance.now());
+
+                    // Очищаем canvas
+                    ctx.clearRect(0,0,canvas.width,canvas.height);
+
+                    // Если найден человек
+                    if (result.landmarks.length > 0) {
+                        const landmarks = result.landmarks[0];
+
+                        // Рисуем все 33 точки
+                        for (const landmark of landmarks) {
+                            const x =landmark.x * canvas.width;
+
+                            const y =landmark.y * canvas.height;
+
+                            ctx.beginPath();
+
+                            ctx.arc(x,y,6,0,Math.PI * 2);
+
+                            ctx.fillStyle = 'red';
+                            ctx.fill();
+                        }
+                    }
+
+                    // Следующий кадр
+                    animationId =requestAnimationFrame(detectPose);
+                }
+
+                detectPose();
+
             } catch (error) {
-                console.error(error);
-                setError('Не удалось получить доступ к камере');
+                console.error('Ошибка:', error);
+
+                if (error instanceof DOMException) {
+                    setError(`Ошибка: ${error.name} — ${error.message}`);
+                } else {
+                    setError('Не удалось запустить MediaPipe');
+                }
             }
         }
 
         startCamera();
+
+        // Очистка
+        return () => {
+            cancelled = true;
+
+            cancelAnimationFrame(animationId);
+
+            if (mediaStream) {
+                mediaStream.getTracks().forEach((track) => {
+                    track.stop();
+                });
+            }
+
+            if (videoRef.current) {
+                videoRef.current.srcObject = null;
+            }
+        };
     }, []);
 
     if (error) {
-        return <p>{error}</p>;
+        return (
+            <p className="camera-error">
+                {error}
+            </p>
+        );
     }
 
     return (
-        <video ref={videoRef} autoPlay playsInline/>
+        <div className="camera-container">
+            <video
+                ref={videoRef}
+                autoPlay
+                playsInline
+                muted
+                className="camera-video"/>
+
+            <canvas ref={canvasRef} className="camera-canvas"/>
+        </div>
     );
 }
 
