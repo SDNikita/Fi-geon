@@ -6,8 +6,9 @@ type Landmark = {
 };
 
 export class LandmarkSmoother {
-    private previous: Landmark[] | null = null;
+    private previous: Landmark[] | null = null;//либо массив либо нул
 
+    //коэфицент сглаживания
     private alpha = 0.25;
 
     smooth(landmarks: Landmark[]) {
@@ -23,6 +24,7 @@ export class LandmarkSmoother {
             const previous = this.previous![index];
 
             return {
+                //Линейная интерполяция
                 x: previous.x + (landmark.x - previous.x) * this.alpha,
                 y: previous.y + (landmark.y - previous.y) * this.alpha,
                 z: previous.z + (landmark.z - previous.z) * this.alpha,
