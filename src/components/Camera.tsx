@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 import { createPoseDetector } from '../services/pose/PoseDetector';
 import '../style/Camera.css';
 import { BODY_LANDMARKS, BODY_CONNECTIONS } from '../services/pose/poseSkeleton';
+import { LandmarkSmoother } from '../services/pose/LandmarkSmootger';
+
 
 function Camera() {
     const videoRef = useRef<HTMLVideoElement>(null);
@@ -37,6 +39,8 @@ function Camera() {
                 videoRef.current.srcObject = null;
             }
         }
+
+        const smoother = new LandmarkSmoother();
 
         async function startCamera() {
             try {
@@ -126,15 +130,13 @@ function Camera() {
 
                     // Если найден человек
                     if (result.landmarks.length > 0) {
-                        const landmarks = result.landmarks[0];
+                        const landmarks = smoother.smooth(result.landmarks[0]);
 
                         // Рисуем точки
                         for (const index of BODY_LANDMARKS) {
                             const landmark = landmarks[index];
-
                             const x = landmark.x * canvas.width;
                             const y = landmark.y * canvas.height;
-
                             ctx.beginPath();
                             ctx.arc(x, y, 6, 0, Math.PI * 2);
 
