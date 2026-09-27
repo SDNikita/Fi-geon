@@ -49,29 +49,39 @@ export function getBestElbowSide(landmarks: Landmark[]) {
 
 //проверка на позу для ожимания
 export function isPushUpPosition(landmarks:Landmark[]){
-    const shoulder = landmarks[11];
-    const hip = landmarks[23];
-    const ankle = landmarks[27];
+    const leftShoulder = landmarks[11];
+    const rightShoulder = landmarks[12];
 
-    if (!shoulder || !hip || !ankle) {
+    const leftHip = landmarks[23];
+    const rightHip = landmarks[24];
+
+    if (!leftShoulder ||!rightShoulder ||!leftHip ||!rightHip) {
         return false;
     }
-    if ((shoulder.visibility ?? 0) < VISIBILITY_THRESHOLD ||
-        (hip.visibility ?? 0) < VISIBILITY_THRESHOLD ||
-        (ankle.visibility ?? 0) < VISIBILITY_THRESHOLD){
+    const shoulderVisibility = (leftShoulder.visibility ?? 0) + (rightShoulder.visibility ?? 0);
+
+    const hipVisibility =(leftHip.visibility ?? 0) +(rightHip.visibility ?? 0);
+
+    if (shoulderVisibility < 0.8 ||hipVisibility < 0.8) {
         return false;
     }
+
+    // Центр плеч
+    const shoulderCenter = {x: (leftShoulder.x + rightShoulder.x) / 2,y: (leftShoulder.y + rightShoulder.y) / 2,};
+
+    // Центр таза
+    const hipCenter = {x: (leftHip.x + rightHip.x) / 2,y: (leftHip.y + rightHip.y) / 2,};
 
     //отколение тела относительно горизонтли
-    const dx = ankle.x - shoulder.x;
-    const dy = ankle.y - shoulder.y;
+    const dx = hipCenter.x - shoulderCenter.x;
+    const dy = hipCenter.y - shoulderCenter.y;
 
     const angle = Math.abs(Math.atan2(dy,dx)*180/Math.PI);
 
     // Приводим угол к диапазону 0-90
     const horizontalAngle = Math.min(angle,180 - angle);
     // Тело должно быть примерно горизонтальным
-    return horizontalAngle < 35;
+    return horizontalAngle < 40;
 }
 
 // a плечо
