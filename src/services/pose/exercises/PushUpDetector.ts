@@ -1,18 +1,8 @@
+import {calculateAngle,type ExerciseResult,type Landmark,} from './ExerciseDetector';
+
 export type PushUpState = 'up'|'down'
 
-type Point = {//2д точка
-    x: number;
-    y: number;
-};
 
-type Landmark = {
-    x: number;
-    y: number;
-    z: number;
-    visibility?: number;
-};
-const VISIBILITY_THRESHOLD = 0.5;
-// Определяем, какая сторона тела лучше видна
 export function getBestElbowSide(landmarks: Landmark[]) {
     const leftShoulder = landmarks[11];
     const leftElbow = landmarks[13];
@@ -84,43 +74,55 @@ export function isPushUpPosition(landmarks:Landmark[]){
     return horizontalAngle < 40;
 }
 
-// a плечо
-// b локоть
-// c запастье
-export function calculateAngle(a:Point, b:Point,c:Point){
-    const angle = Math.atan2(c.y-b.y,c.x-b.x) - Math.atan2(a.y-b.y,a.x-b.x);
 
+export function detectPushUp(landmarks: Landmark[],state: PushUpState): {
+    state: PushUpState;
+    result: ExerciseResult;
+} {
+    const elbowSide = getBestElbowSide(landmarks);
 
-    //перевод радионов
-    let degrees = Math.abs(angle*180/Math.PI);
+    const shoulder = elbowSide.shoulder;
+    const elbow = elbowSide.elbow;
+    const wrist = elbowSide.wrist;
 
-    //человеческий сустав не гнется больше чем на 180
-    if (degrees > 180){
-        degrees= 360-degrees;
-    }
-
-    return degrees;
-}
-//фаза отжиманий
-export function detectPushUp(angle:number, state:PushUpState){
-    //если опустился
-    if (state === 'up' && angle<100){
+    if (
+        (shoulder.visibility ?? 0) < 0.5 ||
+        (elbow.visibility ?? 0) < 0.5 ||
+        (wrist.visibility ?? 0) < 0.5
+    ) {
         return {
-            state: 'down' as PushUpState,
-            completed: false,
+            state,
+            result: {completed: false,},
         };
     }
-    //если поднялся
+
+    const angle = calculateAngle(shoulder,elbow,wrist);
+
+    if (state === 'up' && angle < 100) {
+        return {
+            state: 'down',
+            result: {
+                completed: false,
+                angle,
+            },
+        };
+    }
+
     if (state === 'down' && angle > 160) {
         return {
-            state: 'up' as PushUpState,
-            completed: true,
+            state: 'up',
+            result: {
+                completed: true,
+                angle,
+            },
         };
     }
 
     return {
         state,
-        completed: false,
+        result: {
+            completed: false,
+            angle,
+        },
     };
-
 }

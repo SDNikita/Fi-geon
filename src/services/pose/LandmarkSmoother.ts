@@ -9,7 +9,7 @@ export class LandmarkSmoother {
     private previous: Landmark[] | null = null;//либо массив либо нул
 
     //коэфицент сглаживания
-    private alpha = 0.25;
+    private alpha = 0.5;
 
     smooth(landmarks: Landmark[]) {
         if (!this.previous) {

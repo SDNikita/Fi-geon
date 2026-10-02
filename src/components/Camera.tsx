@@ -2,9 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 import { createPoseDetector } from '../services/pose/PoseDetector';
 import '../style/Camera.css';
 import { LandmarkSmoother } from '../services/pose/LandmarkSmoother';
-import {calculateAngle,detectPushUp,} from '../services/pose/ExerciseDetector';
-
-import type { PushUpState } from '../services/pose/ExerciseDetector';
+import { detectPushUp } from '../services/pose/exercises/PushUpDetector';
+import type { PushUpState } from '../services/pose/exercises/PushUpDetector';
 import { drawPose } from '../services/pose/PoseRenderer';
 
 function Camera() {
@@ -14,6 +13,7 @@ function Camera() {
     const streamRef = useRef<MediaStream | null>(null);
     const animationIdRef = useRef<number | null>(null);
 
+    // Состояние и количество отжиманий
     const pushUpStateRef = useRef<PushUpState>('up');
     const pushUpsRef = useRef(0);
 
@@ -21,12 +21,14 @@ function Camera() {
     const [elbowAngle, setElbowAngle] = useState(0);
     const [error, setError] = useState('');
 
+    // Хук запускается при создании компонента
     useEffect(() => {
         let cancelled = false;
 
+        // Создаём сглаживатель координат
         const smoother = new LandmarkSmoother();
 
-        // Остановка камеры и обработки
+        // Остановка камеры и обработки кадров
         function stopCamera() {
             console.log('Останавливаем камеру');
 
@@ -36,9 +38,12 @@ function Camera() {
                 animationIdRef.current = null;
             }
 
-            // Останавливаем камеру
+            // Останавливаем все потоки камеры
             if (streamRef.current) {
-                streamRef.current.getTracks().forEach((track) => track.stop());
+                streamRef.current.getTracks().forEach((track) => {
+                    track.stop();
+                });
+
                 streamRef.current = null;
             }
 
@@ -48,12 +53,14 @@ function Camera() {
                 videoRef.current.srcObject = null;
             }
 
-            // Сбрасываем сглаживание
+            // Сбрасываем состояние сглаживания
             smoother.reset();
         }
 
+        // Запуск камеры
         async function startCamera() {
             try {
+                // Не запускаем камеру, если вкладка скрыта
                 if (document.visibilityState !== 'visible') {
                     return;
                 }
@@ -67,8 +74,14 @@ function Camera() {
                 });
 
                 // Пока камера запускалась, вкладка могла стать неактивной
-                if (cancelled || document.visibilityState !== 'visible') {
-                    mediaStream.getTracks().forEach((track) => track.stop());
+                if (
+                    cancelled ||
+                    document.visibilityState !== 'visible'
+                ) {
+                    mediaStream.getTracks().forEach((track) => {
+                        track.stop();
+                    });
+
                     return;
                 }
 
@@ -76,6 +89,7 @@ function Camera() {
 
                 const video = videoRef.current;
 
+                // Проверяем, существует ли video
                 if (!video) {
                     stopCamera();
                     return;
@@ -86,8 +100,12 @@ function Camera() {
 
                 // Запускаем видео
                 video.play().catch((error) => {
+                    // AbortError может возникнуть при остановке камеры
                     if (error.name !== 'AbortError') {
-                        console.error('Ошибка запуска видео:', error);
+                        console.error(
+                            'Ошибка запуска видео:',
+                            error
+                        );
                     }
                 });
 
@@ -96,13 +114,19 @@ function Camera() {
 
                 console.log('MediaPipe готов');
 
-                if (cancelled || document.visibilityState !== 'visible') {
+                // Проверяем, что компонент всё ещё активен
+                if (
+                    cancelled ||
+                    document.visibilityState !== 'visible'
+                ) {
                     stopCamera();
                     return;
                 }
 
-                // Обрабатываем кадры
+                // Обработка кадров камеры
                 function detectPose() {
+                    // Если компонент удалён или вкладка скрыта,
+                    // останавливаем обработку
                     if (
                         cancelled ||
                         !videoRef.current ||
@@ -116,17 +140,20 @@ function Camera() {
                     const video = videoRef.current;
                     const canvas = canvasRef.current;
 
-                    // Ждём, пока видео получит размеры
-                    if (video.videoWidth === 0 || video.videoHeight === 0) {
-                        animationIdRef.current = requestAnimationFrame(detectPose);
+                    // Ждём, пока видео получит реальные размеры
+                    if (
+                        video.videoWidth === 0 ||
+                        video.videoHeight === 0
+                    ) {
+                        animationIdRef.current =
+                            requestAnimationFrame(detectPose);
+
                         return;
                     }
 
-                    // Устанавливаем размер canvas только если он изменился
-                    if (
-                        canvas.width !== video.videoWidth ||
-                        canvas.height !== video.videoHeight
-                    ) {
+                    // Размер canvas должен совпадать
+                    // с исходным размером видео
+                    if (canvas.width !== video.videoWidth ||canvas.height !== video.videoHeight) {
                         canvas.width = video.videoWidth;
                         canvas.height = video.videoHeight;
                     }
@@ -137,63 +164,51 @@ function Camera() {
                         return;
                     }
 
-                    // Получаем landmarks
-                    const result = poseLandmarker.detectForVideo(
-                        video,
-                        performance.now()
-                    );
+                    // Получаем landmarks через MediaPipe
+                    const result = poseLandmarker.detectForVideo(video,performance.now());
 
-                    // Очищаем canvas
-                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    // Очищаем предыдущий кадр
+                    ctx.clearRect(0, 0,canvas.width,canvas.height);
 
-                    // Если найден человек
+                    // Если MediaPipe нашёл человека
                     if (result.landmarks.length > 0) {
-                        const landmarks = smoother.smooth(
-                            result.landmarks[0]
-                        );
+                        // Исходные координаты MediaPipe
+                        const rawLandmarks = result.landmarks[0];
 
-                        // Получаем точки для локтя
-                        const shoulder = landmarks[11];
-                        const elbow = landmarks[13];
-                        const wrist = landmarks[15];
+                        // Сглаженные координаты используются
+                        // для отображения скелета
+                        const landmarks =smoother.smooth(rawLandmarks);
 
-                        // Рассчитываем угол локтя
-                        const angle = calculateAngle(
-                            shoulder,
-                            elbow,
-                            wrist
-                        );
+                        // Передаём landmarks детектору отжиманий.
+                        // Вся логика отжиманий находится
+                        // внутри PushUpDetector.ts
+                        const pushUpResult = detectPushUp(rawLandmarks,pushUpStateRef.current);
 
-                        setElbowAngle(Math.round(angle));
-
-                        // Проверяем состояние отжимания
-                        const pushUpResult = detectPushUp(
-                            angle,
-                            pushUpStateRef.current
-                        );
-
+                        // Сохраняем новое состояние отжимания
                         pushUpStateRef.current = pushUpResult.state;
 
-                        // Если отжимание завершено
-                        if (pushUpResult.completed) {
+                        // Если детектор получил угол локтя,
+                        // показываем его на экране
+                        if (pushUpResult.result.angle !== undefined) {
+                            setElbowAngle(Math.round(pushUpResult.result.angle));
+                        }
+
+                        // Если отжимание завершено,
+                        // увеличиваем счётчик
+                        if (pushUpResult.result.completed) {
                             pushUpsRef.current += 1;
                             setPushUps(pushUpsRef.current);
                         }
 
-                        // Рисуем скелет
-                        drawPose(
-                            ctx,
-                            landmarks,
-                            canvas.width,
-                            canvas.height
-                        );
+                        // Рисуем сглаженный скелет
+                        drawPose(ctx,landmarks,canvas.width,canvas.height);
                     }
 
-                    // Следующий кадр
-                    animationIdRef.current =
-                        requestAnimationFrame(detectPose);
+                    // Запускаем обработку следующего кадра
+                    animationIdRef.current =requestAnimationFrame(detectPose);
                 }
 
+                // Запускаем обработку камеры
                 detectPose();
             } catch (error) {
                 console.error('Ошибка:', error);
@@ -203,7 +218,9 @@ function Camera() {
                         `Ошибка: ${error.name} — ${error.message}`
                     );
                 } else {
-                    setError('Не удалось запустить MediaPipe');
+                    setError(
+                        'Не удалось запустить MediaPipe'
+                    );
                 }
             }
         }
@@ -211,8 +228,10 @@ function Camera() {
         // Отслеживаем состояние вкладки
         function handleVisibilityChange() {
             if (document.visibilityState === 'hidden') {
+                // Вкладка скрыта — останавливаем камеру
                 stopCamera();
             } else {
+                // Вкладка снова открыта — запускаем камеру
                 startCamera();
             }
         }
@@ -222,7 +241,7 @@ function Camera() {
             handleVisibilityChange
         );
 
-        // Первый запуск
+        // Первый запуск камеры
         startCamera();
 
         // Очистка при удалении компонента
@@ -238,6 +257,8 @@ function Camera() {
         };
     }, []);
 
+    // Показываем ошибку, если камера или MediaPipe
+    // не смогли запуститься
     if (error) {
         return (
             <p className="camera-error">
@@ -261,10 +282,13 @@ function Camera() {
                 className="camera-canvas"
             />
 
+            {/* Отладочная информация */}
             <div className="pose-debug">
                 <div>Отжимания: {pushUps}</div>
                 <div>Угол локтя: {elbowAngle}°</div>
-                <div>Состояние: {pushUpStateRef.current}</div>
+                <div>
+                    Состояние: {pushUpStateRef.current}
+                </div>
             </div>
         </div>
     );
