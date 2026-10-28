@@ -1,0 +1,39 @@
+.camera-container {
+    position: relative;
+    width: 100%;
+    max-width: 800px;
+}
+
+.camera-video {
+    display: block;
+    width: 100%;
+}
+
+.camera-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+
+    pointer-events: none;
+}
+
+.camera-error {
+    color: red;
+}
+.exercise-controls {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    margin: 16px;
+}
+.exercise-controls select, .exercise-controls button {
+    font: inherit;
+    padding: 8px;
+}
+.exercise-hint { margin: 16px; }
+.camera-container { margin: 0 auto; }
+.pose-debug { padding: 16px; }
