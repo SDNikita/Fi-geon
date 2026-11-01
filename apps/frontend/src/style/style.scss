@@ -1,7 +1,122 @@
-:root{
-    --color-backgound:#101b19;
-    --color-surface: #1d302b;
-    --color-accent: #62d6ae;
-    --color-text: #e5f2ea;
-    --color-gold: #c8aa70;
+:root {
+  --color-surface-level-0: #0d1412;
+  --color-surface-level-1: #141d1b;
+  --color-surface-level-2: #1c2a25;
+  --color-surface-level-3: #253630;
+  --color-surface-level-4: #344c41;
+  --color-surface-level-5: #466353;
+
+  // Основной нефритовый акцент.
+  --color-primary-default: #7fc6a4;
+  --color-primary-hover: #a2d7be;
+  --color-primary-active: #5aae87;
+  --color-primary-subtle: #214c3d;
+  --color-primary-content: #0d1412;
+
+  // Золото и бронза.
+  --color-gold-default: #c8aa70;
+  --color-gold-hover: #e8d9b5;
+  --color-gold-active: #ad8b52;
+  --color-gold-subtle: #3b3220;
+  --color-gold-content: #0d1412;
+
+  // Текст и иконки.
+  --color-content-primary: #efeadb;
+  --color-content-secondary: #b6c5ba;
+  --color-content-tertiary: #84998c;
+  --color-content-disabled: #718076;
+
+  // Границы и выделение фокуса.
+  --color-border-subtle: #253630;
+  --color-border-default: #344c41;
+  --color-border-strong: #84998c;
+  --color-border-focus: #c3e5d4;
+
+  // Состояния.
+  --color-success-default: #7fc6a4;
+  --color-success-subtle: #1d3b2e;
+  --color-danger-default: #e58c80;
+  --color-danger-subtle: #402722;
+  --color-warning-default: #d8b66b;
+  --color-warning-subtle: #3b3220;
+  --color-info-default: #8dbccb;
+  --color-info-subtle: #20343c;
+
+  // Отключённые элементы и затемнение.
+  --color-surface-disabled: #26312b;
+  --color-overlay: rgb(5 12 9 / 72%);
+
+  // Игровые показатели.
+  --color-health: #e58c80;
+  --color-experience: #7fc6a4;
+  --color-reward: #c8aa70;
+
+  --space-0: 0;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+
+  --mobile-navigation-height: 80px;
+
+  // shared control heights
+  --control-height-sm: 36px;
+  --control-height-md: 46px;
+  --control-height-lg: 54px;
+
+  // radius
+  --radius-none: 0;
+  --radius-xs: 6px;
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 18px;
+  --radius-xl: 24px;
+  --radius-sheet: 28px;
+  --radius-round: 9999px;
+
+  // font size
+  --font-size-h1: 32px;
+  --font-size-h2: 24px;
+  --font-size-h3: 20px;
+  --font-size-h4: 18px;
+  --font-size-h5: 16px;
+  --font-size-h6: 14px;
+
+  --font-size-body: 16px;
+  --font-size-body-small: 14px;
+  --font-size-label: 14px;
+  --font-size-action: 14px;
+  --font-size-caption: 12px;
+  --font-size-display: 40px;
+
+   // Семейства шрифтов.
+  --font-family-body: system-ui, 'Segoe UI', sans-serif;
+  --font-family-display: Georgia, 'Times New Roman', serif;
+
+  // Насыщенность шрифта.
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  // Межстрочный интервал.
+  --line-height-heading: 1.2;
+  --line-height-body: 1.5;
+  --line-height-relaxed: 1.7;
+
+  // screen
+  --max-width-pc: 1200px;
+}
+body {
+  margin: 0;
+  background: var(--color-surface-level-1);
+  color: var(--color-content-primary);
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-body);
 }
