@@ -1,0 +1,27 @@
+// Локальные стили компонента.
+.tab {
+    width: var(--tab-height);
+    height: var(--tab-height);
+    padding: 0;
+    border: 1px solid transparent;
+    border-radius: var(--radius-sm);
+}
+
+.tab[aria-selected="true"] {
+    background: var(--color-primary-subtle);
+    border-color: var(--color-primary-default);
+    color: var(--color-primary-default);
+}
+
+.icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+}
+
+.icon svg {
+    width: 100%;
+    height: 100%;
+}

@@ -1,0 +1,11 @@
+// Локальные стили компонента.
+.tab {
+    border: 1px solid transparent;
+    border-radius: var(--radius-sm);
+}
+
+.tab[aria-selected="true"] {
+    background: var(--color-primary-subtle);
+    border-color: var(--color-primary-default);
+    color: var(--color-primary-default);
+}

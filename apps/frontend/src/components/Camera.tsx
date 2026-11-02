@@ -2,15 +2,11 @@ import { useEffect, useRef, useState } from 'react';
 import { createPoseDetector } from '../services/pose/PoseDetector';
 import { LandmarkSmoother } from '../services/pose/LandmarkSmoother';
 import { AutoExerciseDetector } from '../services/pose/exercises/AutoExerciseDetector';
-
-
 import type { ExerciseType, MovementState } from '../services/pose/exercises/ExerciseDetector';
 import { drawPose } from '../services/pose/PoseRenderer';
-import '../style/Camera.css';
-
+import styles from '../style/Camera.module.scss';
 const names = { pushUp: 'Отжимания', sitUp: 'Пресс', jumpingJack: 'Jumping jack', squat: 'Приседания' };
 const phases = { waiting: 'Примите исходное положение', ready: 'Исходное положение', active: 'Вернитесь в исходное положение' };
-
 function CameraSession() {
     const videoRef = useRef<HTMLVideoElement>(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -20,25 +16,23 @@ function CameraSession() {
     const [angle, setAngle] = useState<number | null>(null);
     const [error, setError] = useState('');
     const [hint, setHint] = useState('Загрузка камеры и распознавания…');
-
     useEffect(() => {
         let cancelled = false;
         let generation = 0;
-        let stopSession = () => {};
+        let stopSession = () => { };
         const smoother = new LandmarkSmoother();
         const worldSmoother = new LandmarkSmoother();
-
         function stop() {
             generation++;
             stopSession();
-            stopSession = () => {};
+            stopSession = () => { };
             smoother.reset();
             worldSmoother.reset();
         }
-
         async function start() {
             stop();
-            if (cancelled || document.visibilityState !== 'visible') return;
+            if (cancelled || document.visibilityState !== 'visible')
+                return;
             const token = generation;
             let stream: MediaStream | null = null;
             let detector: Awaited<ReturnType<typeof createPoseDetector>> | null = null;
@@ -64,20 +58,33 @@ function CameraSession() {
                 setExercise(null);
                 setAngle(null);
                 stream = await navigator.mediaDevices.getUserMedia({ video: { width: { ideal: 1280 }, height: { ideal: 720 } }, audio: false });
-                if (stale()) { release(); return; }
+                if (stale()) {
+                    release();
+                    return;
+                }
                 const video = videoRef.current;
-                if (!video) { release(); return; }
+                if (!video) {
+                    release();
+                    return;
+                }
                 video.srcObject = stream;
                 await video.play();
-                if (stale()) { release(); return; }
+                if (stale()) {
+                    release();
+                    return;
+                }
                 detector = await createPoseDetector();
-                if (stale()) { release(); return; }
-
+                if (stale()) {
+                    release();
+                    return;
+                }
                 function detect() {
-                    if (stale()) return;
+                    if (stale())
+                        return;
                     try {
                         const canvas = canvasRef.current;
-                        if (!canvas || !video || !detector) return;
+                        if (!canvas || !video || !detector)
+                            return;
                         if (video.readyState >= 2 && video.currentTime !== lastTime) {
                             lastTime = video.currentTime;
                             if (canvas.width !== video.videoWidth || canvas.height !== video.videoHeight) {
@@ -100,8 +107,10 @@ function CameraSession() {
                                     const completed = detection.exercise;
                                     setCounts((values) => ({ ...values, [completed]: values[completed] + 1 }));
                                 }
-                                if (ctx) drawPose(ctx, smoothed, canvas.width, canvas.height);
-                            } else {
+                                if (ctx)
+                                    drawPose(ctx, smoothed, canvas.width, canvas.height);
+                            }
+                            else {
                                 const detection = recognizer.detect([]);
                                 setExercise(detection.exercise);
                                 setPhase(detection.state);
@@ -112,20 +121,26 @@ function CameraSession() {
                             }
                         }
                         frame = requestAnimationFrame(detect);
-                    } catch (cause) {
+                    }
+                    catch (cause) {
                         release();
-                        if (!stale()) setError(cause instanceof Error ? cause.message : 'Ошибка распознавания');
+                        if (!stale())
+                            setError(cause instanceof Error ? cause.message : 'Ошибка распознавания');
                     }
                 }
                 detect();
-            } catch (cause) {
+            }
+            catch (cause) {
                 release();
-                if (!stale()) setError(cause instanceof Error ? cause.message : 'Не удалось запустить камеру');
+                if (!stale())
+                    setError(cause instanceof Error ? cause.message : 'Не удалось запустить камеру');
             }
         }
         function visibilityChanged() {
-            if (document.visibilityState === 'visible') void start();
-            else stop();
+            if (document.visibilityState === 'visible')
+                void start();
+            else
+                stop();
         }
         document.addEventListener('visibilitychange', visibilityChanged);
         void start();
@@ -135,14 +150,13 @@ function CameraSession() {
             stop();
         };
     }, []);
-
     return <>
-        {error && <p className="camera-error" role="alert">{error}</p>}
-        <div className="camera-container">
-            <video ref={videoRef} autoPlay playsInline muted className="camera-video" />
-            <canvas ref={canvasRef} className="camera-canvas" />
+        {error && <p className={styles.cameraError} role="alert">{error}</p>}
+        <div className={styles.container}>
+            <video ref={videoRef} autoPlay playsInline muted className={styles.cameraVideo}/>
+            <canvas ref={canvasRef} className={styles.cameraCanvas}/>
         </div>
-        <div className="pose-debug">
+        <div className={styles.poseDebug}>
             <div>{exercise ? `Распознано: ${names[exercise]}` : 'Ожидание движения — начните упражнение'}</div>
             {(Object.keys(names) as ExerciseType[]).map((type) => <div key={type}>{names[type]}: {counts[type]}</div>)}
             {angle !== null && <div>Угол: {angle}°</div>}
@@ -151,16 +165,15 @@ function CameraSession() {
         </div>
     </>;
 }
-
 export default function Camera() {
     const [session, setSession] = useState(0);
     return <div>
-        <div className="exercise-controls">
+        <div className={styles.exerciseControls}>
             <button onClick={() => setSession((value) => value + 1)}>Начать заново</button>
         </div>
-        <p className="exercise-hint">Упражнение определяется автоматически. Всё тело должно быть в кадре.
+        <p className={styles.exerciseHint}>Упражнение определяется автоматически. Всё тело должно быть в кадре.
             Для приседаний лучше расположить камеру сбоку или под небольшим углом. Для пресса расположите камеру сбоку, для jumping jack — спереди.
             Отжимания распознаются сбоку и спереди. Начните с исходного положения и выполните полный цикл движения.</p>
-        <CameraSession key={session} />
+        <CameraSession key={session}/>
     </div>;
 }

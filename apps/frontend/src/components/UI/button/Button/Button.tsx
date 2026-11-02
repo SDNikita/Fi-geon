@@ -1,36 +1,22 @@
 import type { ReactNode } from "react";
 import BaseButton from "../BaseButton/BaseButton";
 import type { BaseButtonProps } from "../BaseButton/BaseButton";
-import "./Button.scss";
-
+import styles from './Button.module.scss';
 type ButtonProps = BaseButtonProps & {
-  startIcon?: ReactNode;
-  endIcon?: ReactNode;
+    startIcon?: ReactNode;
+    endIcon?: ReactNode;
 };
-
-function Button({
-  children,
-  startIcon,
-  endIcon,
-  className = "",
-  ...props
-}: ButtonProps) {
-  return (
-    <BaseButton {...props} className={`button ${className}`}>
-      {startIcon && (
-        <span className="button__icon" aria-hidden="true">
+function Button({ children, startIcon, endIcon, className = "", ...props }: ButtonProps) {
+    return (<BaseButton {...props} className={[styles.button, className].filter(Boolean).join(" ")}>
+      {startIcon && (<span className={styles.icon} aria-hidden="true">
           {startIcon}
-        </span>
-      )}
+        </span>)}
 
-      <span className="button__label">{children}</span>
+      <span className={styles.label}>{children}</span>
 
-      {endIcon && (
-        <span className="button__icon" aria-hidden="true">
+      {endIcon && (<span className={styles.icon} aria-hidden="true">
           {endIcon}
-        </span>
-      )}
-    </BaseButton>
-  );
+        </span>)}
+    </BaseButton>);
 }
 export default Button;

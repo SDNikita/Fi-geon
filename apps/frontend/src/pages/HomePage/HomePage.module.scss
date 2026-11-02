@@ -1,0 +1,159 @@
+.page {
+    box-sizing: border-box;
+    min-height: 100svh;
+    padding: var(--space-6);
+
+    background:
+        radial-gradient(
+            ellipse at 50% 30%,
+            var(--color-primary-subtle),
+            transparent 95%
+        ),
+        var(--color-surface-level-0);
+}
+
+.layout {
+    display: grid;
+    gap: var(--space-6);
+
+    width: 100%;
+    max-width: var(--max-width-pc);
+    min-height: calc(100svh - var(--space-6) * 2);
+    margin-inline: auto;
+}
+
+.art {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: var(--space-8);
+}
+
+.emblem {
+    display: block;
+    width: clamp(180px, 55vw, 320px);
+    max-width: 100%;
+    height: auto;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-8);
+
+    min-width: 0;
+    text-align: center;
+}
+
+.intro {
+    width: 100%;
+}
+
+.brandTitle {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-2);
+
+    margin: 0;
+    font-family: var(--font-family-body);
+    font-size: clamp(54px, 8.5vw, 64px);
+    line-height: 1;
+    text-transform: uppercase;
+}
+
+.brandName {
+    display: block;
+    color: var(--color-content-primary);
+    white-space: nowrap;
+}
+
+.brandSubtitle {
+    display: block;
+    color: var(--color-primary-default);
+    letter-spacing: 0.12em;
+
+    padding-left: 0.12em;
+}
+
+.actions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+
+    width: 100%;
+    max-width: 400px;
+    margin-top: auto;
+    padding-top: var(--space-6);
+}
+
+.login {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+
+    color: var(--color-content-tertiary);
+    font-size: var(--font-size-body-small);
+}
+
+// Компактные телефоны.
+@media (max-width: 359px) {
+    .page {
+        padding: var(--space-4);
+    }
+
+    .layout {
+        min-height: calc(100svh - var(--space-4) * 2);
+    }
+
+    .art {
+        padding-top: var(--space-4);
+    }
+}
+
+// Компьютеры и широкие планшеты.
+@media (min-width: 900px) {
+    .page {
+        padding: var(--space-12);
+    }
+
+    .layout {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto;
+        align-items: center;
+        gap: var(--space-12);
+
+        min-height: calc(100svh - var(--space-12) * 2);
+    }
+
+    .art {
+        padding-top: 0;
+    }
+
+    .emblem {
+        width: 100%;
+        max-width: 480px;
+    }
+
+    .content {
+        align-items: flex-start;
+        text-align: left;
+    }
+
+    .brandTitle {
+        align-items: flex-start;
+        font-size: clamp(44px, 5vw, 68px);
+    }
+
+    .brandSubtitle {
+        padding-left: 0;
+    }
+
+    .actions {
+        margin-top: var(--space-6);
+        padding-top: 0;
+    }
+}

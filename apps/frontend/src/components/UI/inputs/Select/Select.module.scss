@@ -1,0 +1,9 @@
+// Локальные стили компонента.
+.select {
+    padding-right: var(--space-8);
+    cursor: pointer;
+}
+
+.select:disabled {
+    cursor: not-allowed;
+}

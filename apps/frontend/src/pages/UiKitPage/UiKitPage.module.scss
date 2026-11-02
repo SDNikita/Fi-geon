@@ -1,0 +1,157 @@
+// Локальные стили компонента.
+.page {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: var(--max-width-pc);
+    margin-inline: auto;
+    padding: var(--space-8) var(--space-6) var(--space-12);
+    text-align: left;
+}
+
+.page h1, .page h2, .page h3, .page p {
+    margin: 0;
+}
+
+.page h1 {
+    font-size: var(--font-size-display);
+    line-height: var(--line-height-heading);
+}
+
+.page h2 {
+    font-size: var(--font-size-h2);
+    line-height: var(--line-height-heading);
+}
+
+.header {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-3);
+}
+
+.header p {
+    color: var(--color-content-secondary);
+}
+
+.eyebrow {
+    color: var(--color-gold-default);
+    font-size: var(--font-size-caption);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.contents {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-top: var(--space-2);
+}
+
+.contents a {
+    padding: var(--space-2) var(--space-3);
+    border: 1px solid var(--color-border-default);
+    border-radius: var(--radius-round);
+    color: var(--color-content-secondary);
+    text-decoration: none;
+}
+
+.contents a:hover {
+    background: var(--color-primary-subtle);
+    color: var(--color-primary-hover);
+}
+
+.section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+    margin-top: var(--space-10);
+    scroll-margin-top: var(--space-6);
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+    min-width: 0;
+    padding: var(--space-6);
+    background: var(--color-surface-level-2);
+    border: 1px solid var(--color-border-default);
+    border-radius: var(--radius-xl);
+}
+
+.card h3 {
+    font-size: var(--font-size-h3);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-heading);
+    color: var(--color-content-secondary);
+}
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-4);
+    min-width: 0;
+}
+
+.rowFields {
+    align-items: flex-start;
+}
+
+.rowScale {
+    align-items: flex-end;
+}
+
+.rowScale [data-slot="input-field"] {
+    width: 200px;
+}
+
+.card > [data-slot="input-field"], .row > [data-slot="input-field"] {
+    flex-shrink: 1;
+}
+
+.tabs {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    min-width: 0;
+    max-width: 100%;
+    padding: var(--space-1);
+    overflow-x: auto;
+}
+
+.page [role=tabpanel] {
+    padding: var(--space-4);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-sm);
+    background: var(--color-surface-level-1);
+    color: var(--color-content-secondary);
+}
+
+.note {
+    font-size: var(--font-size-body-small);
+    color: var(--color-content-secondary);
+}
+
+.page a:focus-visible,
+.page [role=tabpanel]:focus-visible {
+    outline: 2px solid var(--color-border-focus);
+    outline-offset: 3px;
+}
+
+@media (max-width: 479px) {
+    .page {
+        padding: var(--space-6) var(--space-4) var(--space-10);
+    }
+    .card {
+        padding: var(--space-4);
+        gap: var(--space-5);
+    }
+    .row {
+        gap: var(--space-3);
+    }
+    .row > [data-slot="input-field"] {
+        width: 100%;
+    }
+}
