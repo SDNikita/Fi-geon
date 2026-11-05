@@ -7,7 +7,7 @@
         radial-gradient(
             ellipse at 50% 30%,
             var(--color-primary-subtle),
-            transparent 95%
+            transparent 75%
         ),
         var(--color-surface-level-0);
 }
@@ -58,7 +58,8 @@
 
     margin: 0;
     font-family: var(--font-family-body);
-    font-size: clamp(54px, 8.5vw, 64px);
+    font-size: clamp(32px, 8.5vw, 64px);
+    font-weight: 900;
     line-height: 1;
     text-transform: uppercase;
 }
@@ -72,6 +73,7 @@
 .brandSubtitle {
     display: block;
     color: var(--color-primary-default);
+    font-size: 0.55em;
     letter-spacing: 0.12em;
 
     padding-left: 0.12em;

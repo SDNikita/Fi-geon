@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" fill="none" role="img" aria-labelledby="title">
+  <title id="title">Школа Небесного орла</title>
+  <g stroke="#C8AA70" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="miter" stroke-miterlimit="5">
+    <path d="M10 38c2-10 8-18 17-22l-6-1c7-7 17-10 25-6 5 2 7 6 6 11"/>
+    <path d="M43 11c3 4 2 8-2 11l-5 4 10-2 9 2 2 6 1-10-4-6-8-2"/>
+    <path d="M46 25c-8 3-11 9-10 17l2 11 7 7-10-3-5-8 1 10-9-5-3 5 1-13-9 9 4-17"/>
+    <path d="M15 29c-4 6-7 12-8 18l8-9M33 16l7 1-4 3M28 40l-2 9 5 10"/>
+  </g>
+</svg>

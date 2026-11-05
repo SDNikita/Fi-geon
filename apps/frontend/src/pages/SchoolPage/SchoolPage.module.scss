@@ -1,0 +1,152 @@
+.page {
+    display: flex;
+    flex-direction: column;
+    min-height: 100svh;
+    padding: var(--space-6);
+
+    background:
+        radial-gradient(
+            ellipse at 50% 30%,
+            var(--color-primary-subtle),
+            transparent 75%
+        ),
+        var(--color-surface-level-0);
+}
+
+.layout {
+    width: 100%;
+    max-width: 1120px;
+    min-height: calc(100svh - var(--space-6) * 2);
+    margin-inline: auto;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+    min-width: 0;
+    min-height: inherit;
+}
+
+.intro {
+    min-width: 0;
+}
+
+.heading {
+    font-size: clamp(28px, 5vw, 36px);
+    line-height: 1.15;
+}
+
+.intro p {
+    max-width: 32ch;
+    margin-top: var(--space-3);
+    font-size: var(--font-size-body);
+}
+
+.selection {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    min-width: 0;
+}
+
+.schoolLabel {
+    margin: 0;
+    color: var(--color-content-secondary);
+    font-size: var(--font-size-label);
+}
+
+.schools {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-3);
+    min-width: 0;
+}
+
+.actions {
+    margin-top: auto;
+}
+
+.footerText {
+    margin: 0;
+    color: var(--color-content-tertiary);
+    font-size: var(--font-size-body-small);
+    text-align: center;
+}
+
+// На компактном экране оставляем больше места самим карточкам.
+@media (max-width: 359px) {
+    .page {
+        padding: var(--space-4);
+    }
+
+    .layout {
+        min-height: calc(100svh - var(--space-4) * 2);
+    }
+}
+
+// На планшете содержимое не растягивается на всю ширину.
+@media (min-width: 600px) and (max-width: 999px) {
+    .layout {
+        max-width: 600px;
+    }
+}
+
+// На ПК заголовок стоит слева, а выбор и действия — справа.
+@media (min-width: 1000px) {
+    .page {
+        justify-content: center;
+        padding: var(--space-12);
+    }
+
+    .layout {
+        min-height: 0;
+    }
+
+    .content {
+        display: grid;
+        grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+        grid-template-areas:
+            "intro selection"
+            "intro actions"
+            "intro footer";
+        column-gap: var(--space-12);
+        row-gap: var(--space-4);
+        align-items: start;
+    }
+
+    .intro {
+        grid-area: intro;
+        align-self: center;
+    }
+
+    .heading {
+        font-size: clamp(44px, 4vw, 56px);
+    }
+
+    .intro p {
+        font-size: 18px;
+    }
+
+    .selection {
+        grid-area: selection;
+    }
+
+    .schools {
+        --radio-card-height: 140px;
+        --radio-card-icon-size: 48px;
+
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: var(--space-4);
+    }
+
+    .actions {
+        grid-area: actions;
+        margin-top: var(--space-2);
+    }
+
+    .footerText {
+        grid-area: footer;
+        margin-top: 0;
+    }
+}

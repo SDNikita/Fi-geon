@@ -8,6 +8,11 @@ import Input from "../../components/UI/inputs/Input/Input";
 import TextInput from "../../components/UI/inputs/TextInput/TextInput";
 import Select from "../../components/UI/inputs/Select/Select";
 import Checkbox from "../../components/UI/inputs/Checkbox/Checkbox";
+import RadioCard from "../../components/UI/inputs/RadioCard/RadioCard";
+import dragonIcon from "../../assets/school-dragon.svg";
+import tigerIcon from "../../assets/school-tiger.svg";
+import snakeIcon from "../../assets/school-snake.svg";
+import eagleIcon from "../../assets/school-eagle.svg";
 import BaseTab from "../../components/UI/tabs/BaseTab/BaseTab";
 import StyleTab from "../../components/UI/tabs/StyleTab/StyleTab";
 import IconTab from "../../components/UI/tabs/IconTab/IconTab";
@@ -39,6 +44,19 @@ const sizes = [
     { value: "md", label: "Medium" },
     { value: "lg", label: "Large" },
 ] as const;
+
+const schoolOptions = [
+    { value: 'dragon', title: 'Дракон', description: 'Сила и стойкость', icon: dragonIcon },
+    { value: 'tiger', title: 'Тигр', description: 'Мощные атаки', icon: tigerIcon },
+    { value: 'snake', title: 'Змея', description: 'Гибкость и точность', icon: snakeIcon },
+    { value: 'eagle', title: 'Небесный орёл', description: 'Скорость и баланс', icon: eagleIcon },
+];
+
+const trainingGoals = [
+    { value: 'short', title: 'Короткая тренировка', description: 'Цель — 5 минут' },
+    { value: 'regular', title: 'Обычная тренировка', description: 'Цель — 15 минут' },
+    { value: 'long', title: 'Продолжительная тренировка', description: 'Цель — 30 минут' },
+];
 // Обёртка остаётся на странице: отдельный файл TabList не нужен.
 function TabList({ label, children }: {
     label: string;
@@ -74,6 +92,8 @@ function UiKitPage() {
     const [styleTab, setStyleTab] = useState("story");
     const [iconTab, setIconTab] = useState("strength");
     const [isPlaying, setIsPlaying] = useState(false);
+    const [selectedSchool, setSelectedSchool] = useState('dragon');
+    const [selectedGoal, setSelectedGoal] = useState('regular');
     return (<main className={styles.page}>
       <header className={styles.header}>
         <span className={styles.eyebrow}>Dungeon Training</span>
@@ -83,6 +103,7 @@ function UiKitPage() {
           <a href="#kit-buttons">Кнопки</a>
           <a href="#kit-sizes">Размеры</a>
           <a href="#kit-inputs">Поля ввода</a>
+          <a href="#kit-radio">Радиокнопки</a>
           <a href="#kit-tabs">Вкладки</a>
         </nav>
       </header>
@@ -229,6 +250,56 @@ function UiKitPage() {
           </div>
         </div>
       </section>
+      <section id="kit-radio" className={styles.section}>
+        <h2>Радиокнопки</h2>
+
+        <div className={styles.card}>
+          <h3>Карточки с иконками</h3>
+          <p className={styles.note}>В группе можно выбрать только одну школу.</p>
+
+          <div className={styles.radioGrid} role="radiogroup" aria-label="Пример выбора школы">
+            {schoolOptions.map((item) => (
+              <RadioCard
+                key={item.value}
+                name={`${prefix}-school`}
+                value={item.value}
+                title={item.title}
+                description={item.description}
+                icon={<img className={styles.radioIcon} src={item.icon} alt="" />}
+                checked={selectedSchool === item.value}
+                onChange={setSelectedSchool}
+              />
+            ))}
+          </div>
+
+          <p className={styles.note} role="status">
+            Выбрана школа: {schoolOptions.find((item) => item.value === selectedSchool)?.title}
+          </p>
+        </div>
+
+        <div className={styles.card}>
+          <h3>Карточки без иконок</h3>
+
+          <div className={styles.radioList} role="radiogroup" aria-label="Пример выбора длительности тренировки">
+            {trainingGoals.map((item) => (
+              <RadioCard
+                key={item.value}
+                name={`${prefix}-training-goal`}
+                value={item.value}
+                title={item.title}
+                description={item.description}
+                checked={selectedGoal === item.value}
+                onChange={setSelectedGoal}
+              />
+            ))}
+          </div>
+
+          <p className={styles.note} role="status">
+            Выбрано: {trainingGoals.find((item) => item.value === selectedGoal)?.title}
+          </p>
+        </div>
+      </section>
+
       <section id="kit-tabs" className={styles.section}>
         <h2>Вкладки</h2>
 

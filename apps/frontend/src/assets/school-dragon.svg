@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" fill="none" role="img" aria-labelledby="title">
+  <title id="title">Школа Дракона</title>
+  <g stroke="#C8AA70" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="miter" stroke-miterlimit="5">
+    <path d="M31 21 24 15 20 6 31 16 39 21 44 27 54 31 53 36 47 35 43 32"/>
+    <path d="m31 21-11-3-8-8 4 9 8 6-12 1 4 3-9 5 4 1-6 8 5-1-2 10 5-4 1 9 4-3"/>
+    <path d="M18 54c-4-8-3-16 2-21 4-4 9-5 14-3"/>
+    <path d="m53 36-3 5-8-2-3-4-7-1c-7-1-11 4-10 10 1 7 10 9 13 16"/>
+    <path d="M29 34c-6 3-7 8-4 13M35 28l6 3-4 1M48 32l2 1M43 39l-3 3-4-3"/>
+  </g>
+</svg>

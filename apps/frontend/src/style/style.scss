@@ -112,6 +112,13 @@
   // screen
   --max-width-pc: 1200px;
 }
+// Размеры элементов включают внутренние отступы и границы.
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
   background: var(--color-surface-level-1);
