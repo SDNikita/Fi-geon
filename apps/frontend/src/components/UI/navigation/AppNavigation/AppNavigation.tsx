@@ -49,6 +49,10 @@ const items: NavigationItem[]=[
 ];
 
 function AppNavigation(){
+    const level =1;
+    const experience = 350;
+    const nextLevelExperience = 1000;
+
    return(
     <nav className={styles.navigation}>
 
@@ -84,6 +88,27 @@ function AppNavigation(){
                 </NavTab>
             ))}
         </div>
+        
+        <div className={styles.bottom}>
+            <div className={styles.levelCard}>
+                <div className={styles.levelHeading}>
+                    <strong>Уровень {level}</strong>
+                     <span className={styles.levelIcon}>⚔</span>
+                </div>
+
+                <progress
+                    className={styles.experienceBar}
+                    value={experience}
+                    max = {nextLevelExperience}>
+                    {experience}/{nextLevelExperience} XP
+                </progress>
+
+                <p className={styles.experienceText}>
+                    {experience} / {nextLevelExperience} XP
+                </p>
+            </div>
+        </div>
+
     </nav>
    );
 }

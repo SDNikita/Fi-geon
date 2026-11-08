@@ -22,12 +22,17 @@
 .header {
     display: none;
 }
+.bottom{
+    display:none;
+}
 
 .links {
+    border-top: 1px solid var(--color-border-default);
     display: flex;
     align-items: stretch;
     height: 100%;
     gap: var(--space-2);
+    padding-top: var(--space-4);
 }
 
 .link {
@@ -52,7 +57,7 @@
         top: 0;
         right: auto;
         bottom: 0;
-
+        
         display: flex;
         flex-direction: column;
         gap: var(--space-10);
@@ -62,8 +67,73 @@
         padding: var(--space-6) var(--space-4);
         overflow-y: auto;
 
+        
+
         border-top: 0;
         border-right: 1px solid var(--color-border-default);
+    }
+
+    .bottom{
+        display: flex;
+        flex-direction: column;
+        padding: var(--space-3);
+        border-top: 1px solid var(--color-border-default);
+    }
+
+    .levelCard{
+        display: flex;
+        flex-direction: column;
+        padding: var(--space-3);
+
+
+        background: var(--color-surface-level-3);
+        border: 1px solid var(--color-border-default);
+        border-radius: var(--radius-md);
+    }
+
+    .levelHeading{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--space-2);
+    }
+    .levelIcon{
+        font-size: var(--font-size-h2);
+        color: var(--color-primary-default);
+    }
+
+    .experienceBar {
+        display: block;
+        width: 100%;
+        height: 8px;
+        overflow: hidden;
+
+        appearance: none;
+        border: 0;
+        border-radius: var(--radius-round);
+        background: var(--color-surface-level-4);
+    }
+
+    .experienceBar::-webkit-progress-bar {
+        background: var(--color-surface-level-5);
+        border-radius: var(--radius-round);
+    }
+
+    .experienceBar::-webkit-progress-value {
+        background: var(--color-primary-default);
+        border-radius: var(--radius-round);
+    }
+
+    // для firefox
+    .experienceBar::-moz-progress-bar {
+        background: var(--color-primary-default);
+        border-radius: var(--radius-round);
+    }
+
+    .experienceText {
+        margin: 0;
+        color: var(--color-content-secondary);
+        font-size: var(--font-size-body-small);
     }
 
     .header {

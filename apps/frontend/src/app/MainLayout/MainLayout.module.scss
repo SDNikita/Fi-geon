@@ -1,7 +1,8 @@
 .shell {
+    display: flow-root;
     --sidebar-width: 240px;
-
     min-height: 100svh;
+
 }
 
 .content {
@@ -17,5 +18,17 @@
     .content {
         margin-left: var(--sidebar-width);
         padding-bottom: 0;
+    }
+
+    .shell{
+        background-image:
+            linear-gradient(
+                rgb(9 20 24 / 35%),
+                rgb(9 20 24 / 65%)
+            ),
+        url('../../assets/backgrounds/backMain.png');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
     }
 }
