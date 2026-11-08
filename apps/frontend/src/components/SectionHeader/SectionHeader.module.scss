@@ -1,10 +1,8 @@
-// Локальные стили компонента.
 .header {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: var(--space-4);
-    min-width: 0;
 }
 
 .content {
@@ -13,6 +11,9 @@
 }
 
 .title {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
     margin: 0;
     color: var(--color-content-primary);
     font-family: var(--font-family-body);
@@ -20,19 +21,6 @@
     line-height: var(--line-height-heading);
     overflow-wrap: anywhere;
 }
-
-.h1 {
-    font-size: var(--font-size-h1);
-}
-
-.h2 {
-    font-size: var(--font-size-h2);
-}
-
-.h3 {
-    font-size: var(--font-size-h3);
-}
-
 .description {
     margin: var(--space-2) 0 0;
     color: var(--color-content-secondary);
@@ -40,7 +28,15 @@
     line-height: var(--line-height-body);
     overflow-wrap: anywhere;
 }
+.icon{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 
+    width: 64px;
+    height: 64px;
+    flex-shrink: 0;
+}
 .action {
     display: flex;
     align-items: center;

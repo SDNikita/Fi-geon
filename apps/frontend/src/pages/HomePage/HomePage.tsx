@@ -2,8 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import SectionHeader from '../../components/SectionHeader/SectionHeader';
 import styles from './HomePage.module.scss';
 import emblem from '../../assets/mountain-peak.svg';
-// import emblem2 from '../../assets/qi-flow.svg';
-// import emblem3 from '../../assets/school-seal.svg';
+// import emblem2 from '../../assets/mountain-pagoda-sage-gold-refined-preview.png';
 import Button from '../../components/UI/button/Button/Button';
 
 function HomePage() {

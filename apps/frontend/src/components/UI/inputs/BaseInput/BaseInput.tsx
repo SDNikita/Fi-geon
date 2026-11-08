@@ -5,6 +5,8 @@ export type BaseInputProps = Omit<ComponentPropsWithoutRef<'input'>, 'size'> & {
     size?: InputSize;
 };
 function BaseInput({ size = 'md', type = 'text', className = '', ...props }: BaseInputProps) {
-    return (<input {...props} type={type} className={[styles.input, styles[size], className].filter(Boolean).join(" ")}/>);
+    return (
+        <input {...props} type={type} className={[styles.input, styles[size], className].filter(Boolean).join(" ")}/>
+    );
 }
 export default BaseInput;

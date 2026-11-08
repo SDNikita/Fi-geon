@@ -3,13 +3,14 @@
     min-height: 100svh;
     padding: var(--space-6);
 
-    background:
-        radial-gradient(
-            ellipse at 50% 30%,
-            var(--color-primary-subtle),
-            transparent 75%
-        ),
-        var(--color-surface-level-0);
+    // Затемнение сохраняет читаемость текста поверх иллюстрации.
+    background-color: var(--color-surface-level-0);
+    background-image:
+        linear-gradient(var(--color-background-shade), var(--color-background-shade)),
+        url('../../assets/backgrounds/night-temple.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center, 24% center;
 }
 
 .layout {
@@ -120,6 +121,7 @@
 @media (min-width: 900px) {
     .page {
         padding: var(--space-12);
+        background-position: center;
     }
 
     .layout {

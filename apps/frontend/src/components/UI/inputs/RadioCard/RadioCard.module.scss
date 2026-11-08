@@ -21,7 +21,7 @@
 }
 
 .card:has(.radio:checked) {
-    background: var(--color-primary-subtle);
+    background: var(--color-surface-selected);
     border-color: var(--color-primary-default);
 }
 
@@ -39,7 +39,7 @@
     height: var(--radio-card-icon-size, 36px);
     flex-shrink: 0;
 
-    color: var(--color-gold-default);
+    color: var(--color-content-secondary);
 }
 
 .icon svg,
@@ -48,6 +48,19 @@
     width: 100%;
     height: 100%;
     object-fit: contain;
+}
+
+// Неактивные эмблемы светлые, выбранная сохраняет золотой контур.
+.icon img {
+    filter: grayscale(1) brightness(1.6);
+}
+
+.card:has(.radio:checked) .icon {
+    color: var(--color-primary-default);
+}
+
+.card:has(.radio:checked) .icon img {
+    filter: none;
 }
 
 .content {

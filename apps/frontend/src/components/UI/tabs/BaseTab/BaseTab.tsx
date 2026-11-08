@@ -5,15 +5,16 @@ export type BaseTabProps = Omit<ComponentPropsWithoutRef<'button'>, 'role' | 'ar
     panelId: string;
     id: string;
     size?: 'sm' | 'md' | 'lg';
+    tabIndex?: number;
 };
-function BaseTab({ children, selected, panelId, size = 'md', type = 'button', className = '', ...props }: BaseTabProps) {
+function BaseTab({ children, selected, panelId, size = 'md', type = 'button', className = '', tabIndex = selected ? 0 : -1, ...props }: BaseTabProps) {
     const classes = [
         styles.tab,
         styles[size],
         selected && styles.selected,
         className,
     ].filter(Boolean).join(' ');
-    return (<button {...props} type={type} role="tab" aria-selected={selected} aria-controls={panelId} tabIndex={selected ? 0 : -1} className={classes}>
+    return (<button {...props} type={type} role="tab" aria-selected={selected} aria-controls={panelId} tabIndex={tabIndex} className={classes}>
             {children}
         </button>);
 }
