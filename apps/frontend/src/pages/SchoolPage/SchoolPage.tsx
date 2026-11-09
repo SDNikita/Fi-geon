@@ -39,7 +39,7 @@ const schools = [
 
 function SchoolPage() {
   const navigate = useNavigate();
-const [school, setSchool] = useState('dragon');
+  const [school, setSchool] = useState('dragon');
   return (
     <main className={styles.page}>
       <div className={styles.layout}>
