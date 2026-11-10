@@ -7,7 +7,8 @@ import Select from '../../components/UI/inputs/Select/Select';
 
 import  styles from "./SettingPage.module.scss"
 
-import { BellIcon, SpeakerHighIcon,FlipHorizontalIcon,SignOutIcon,GlobeIcon,MoonIcon } from '@phosphor-icons/react';
+import { BellIcon, SpeakerHighIcon,FlipHorizontalIcon,SignOutIcon,GlobeIcon,MoonIcon, ArrowLeftIcon } from '@phosphor-icons/react';
+import { Link } from 'react-router-dom';
 
 
 
@@ -21,11 +22,20 @@ function SettingPage(){
     return(
         <main>
             <div className={styles.layout}>
+                <div className={styles.topbar}>
+                    <Link
+                        to= "/profile"
+                        className={styles.back}
+                        aria-label = "Назад в профиль">
+                            <ArrowLeftIcon size={24} />
+                    </Link>
 
-                <SectionHeader
-                    title = "Настройки"
-                    level={1}>
-                </SectionHeader>
+                    <SectionHeader
+                        title = "Настройки"
+                        level={1}>
+                    </SectionHeader>
+                </div>
+                
 
                 <div className={styles.content}> 
                     <section className={styles.card}>
