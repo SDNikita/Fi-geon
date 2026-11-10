@@ -1,9 +1,88 @@
-// Локальные стили компонента.
 .select {
-    padding-right: var(--space-8);
+    padding-inline: var(--space-3);
+    border: 1px solid var(--color-border-default);
+    border-radius: var(--radius-xs);
+    background: var(--color-surface-level-1);
+    color: var(--color-content-primary);
+    font-weight: var(--font-weight-semibold);
     cursor: pointer;
+    align-items: center;
+    
+}
+.field{
+    display:grid;
+    grid-template-columns: 1fr 55%;
+    align-items: center;
+    gap: var(--space-3);
 }
 
 .select:disabled {
     cursor: not-allowed;
+}
+.label {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+
+    color: var(--color-content-primary);
+    font-family: var(--font-family-body);
+    font-size: var(--font-size-label);
+    font-weight: var(--font-weight-regular);
+    line-height: var(--line-height-body);
+}
+
+.icon {
+    display: flex;
+    flex-shrink: 0;
+}
+.field > label {
+    color: var(--color-content-primary);
+    font-family: var(--font-family-body);
+    font-size: var(--font-size-label);
+    font-weight: var(--font-weight-regular);
+    line-height: var(--line-height-body);
+}
+
+@supports (appearance: base-select) and selector(::picker(select)){
+    .select,
+    .select::picker(select){
+        appearance: base-select;
+    }
+
+    .select::picker(select){
+        margin-block: var(--space-2);
+        padding: var(--space-1);
+        border: 1px solid var(--color-border-default);
+        border-radius: var(--radius-sm);
+        background: var(--color-surface-level-0);
+        color: var(--color-content-primary);
+        
+    }
+    .select::picker-icon {
+        color: var(--color-primary-default);
+    }
+
+    .select:open::picker-icon {
+        rotate: 180deg;
+    }
+
+    .select option {
+        padding: var(--space-3);
+        border-radius: var(--radius-xs);
+        font-weight: var(--font-weight-regular);
+    }
+
+    .select option:not(:disabled):is(:hover, :focus-visible) {
+        background: var(--color-surface-level-2);
+    }
+
+    .select option:checked {
+        background: var(--color-surface-selected);
+        color: var(--color-primary-default);
+        font-weight: var(--font-weight-semibold);
+    }
+
+    .select option::checkmark {
+        display: none;
+    }
 }
